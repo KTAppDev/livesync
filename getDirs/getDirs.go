@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 	"syscall"
+
+	"github.com/ktappdev/filesync/unixTimeConverter"
 )
 
 func GetDirectories(cwd string) {
@@ -36,8 +38,8 @@ func GetDirectories(cwd string) {
 				fmt.Println("Inode:", stat.Ino)
 				fmt.Println("UID:", stat.Uid)
 				fmt.Println("GID:", stat.Gid)
-				// fmt.Println("Creation Date: ", unix_time_converter.ConvertUnixTimeToReadable(stat.Birthtimespec.Sec))
-				// fmt.Println("Modified Date: ", unix_time_converter.ConvertUnixTimeToReadable(stat.Mtimespec.Sec))
+				fmt.Println("Creation Date: ", unixTimeConverter.ConvertUnixTimeToReadable(stat.Birthtimespec.Sec))
+				fmt.Println("Modified Date: ", unixTimeConverter.ConvertUnixTimeToReadable(stat.Mtimespec.Sec))
 				fmt.Println("END DIR STATS")
 				fmt.Println("")
 			} else {
