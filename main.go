@@ -10,13 +10,14 @@ import (
 )
 
 func main() {
-	a := app.New()
 	files := data.GetFakeFiles()
+	a := app.New()
 	w := ui.NewFileManagerUI(a, files)
 
 	directory := "/Users/kentaylor/Downloads/"
 	getDirs.GetDirectories(directory)
 	getFiles.GetFiles(directory)
+
 	go monitorFiles.MonitorFiles(directory)
 
 	w.Run()

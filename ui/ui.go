@@ -6,6 +6,7 @@ import (
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 	"github.com/ktappdev/filesync/models" // Assuming the FileInfo struct and related logic are in the model package
@@ -74,10 +75,21 @@ func (ui *FileManagerUI) setupUI() {
 	scrollableFileList := container.NewVScroll(ui.fileList)
 	listContainer := container.NewBorder(searchEntry, nil, nil, nil, scrollableFileList)
 
+	// Top bar
+	topBar := widget.NewToolbar(
+		widget.NewToolbarAction(theme.ContentAddIcon(), func() {}),
+		widget.NewToolbarSpacer(),
+		widget.NewToolbarAction(theme.MailComposeIcon(), func() {}),
+		widget.NewToolbarAction(theme.HelpIcon(), func() {}),
+		widget.NewToolbarAction(theme.AccountIcon(), func() {}),
+	)
+
 	split := container.NewHSplit(listContainer, ui.detailContainer)
 	split.Offset = 0.3
 
-	ui.window.SetContent(split)
+	borderLayout := layout.NewBorderLayout(topBar, nil, nil, nil)
+	allContent := container.New(borderLayout, topBar, split)
+	ui.window.SetContent(allContent)
 
 	// Initialize the file list with all files
 	ui.updateFileList("")
