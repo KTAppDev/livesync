@@ -5,6 +5,7 @@ import (
 	"fyne.io/fyne/v2/widget"
 	"github.com/ktappdev/filesync/getDirs"
 	"github.com/ktappdev/filesync/getFiles"
+	"github.com/ktappdev/filesync/monitorFiles"
 )
 
 func main() {
@@ -15,7 +16,7 @@ func main() {
 	directory := "/Users/kentaylor/Downloads/"
 	getDirs.GetDirectories(directory)
 	getFiles.GetFiles(directory)
-	// monitorfiles.MonitorFiles(directory)
+	monitorFiles.MonitorFiles(directory)
 
 	w.ShowAndRun()
 }
