@@ -1,13 +1,14 @@
 package getFiles
 
 import (
-	"fmt"
+	"github.com/ktappdev/filesync/models" // Assuming the FileInfo struct and related logic are in the model package
 	"io/fs"
 	"path/filepath"
-	"time"
 )
 
-func GetFiles(cwd string) {
+func GetFiles(cwd string) ([]models.FileInfo, error) {
+	var filesInfo []models.FileInfo
+
 	err := filepath.WalkDir(cwd, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return err
@@ -17,13 +18,20 @@ func GetFiles(cwd string) {
 			if err != nil {
 				return err
 			}
-			fmt.Printf("File: %s, Size: %d, Permissions: %s, Modified: %s\n",
-				path, info.Size(), info.Mode(), info.ModTime().Format(time.RFC3339))
+			fileInfo := models.FileInfo{
+				Path:        path,
+				Size:        info.Size(),
+				Permissions: info.Mode(),
+				Modified:    info.ModTime(),
+			}
+			filesInfo = append(filesInfo, fileInfo)
 		}
 		return nil
 	})
 
 	if err != nil {
-		fmt.Printf("Error reading directory: %v\n", err)
+		return nil, err
 	}
+
+	return filesInfo, nil
 }
