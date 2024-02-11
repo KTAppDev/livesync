@@ -36,6 +36,7 @@ func NewFileManagerUI(app fyne.App, files []models.FileInfo) *FileManagerUI {
 func (ui *FileManagerUI) setupUI() {
 	ui.window = ui.app.NewWindow("File Manager")
 	ui.window.Resize(fyne.NewSize(800, 600))
+	// abletonIcon :=
 
 	searchEntry := widget.NewEntry()
 	searchEntry.SetPlaceHolder("Search files...")
@@ -48,10 +49,15 @@ func (ui *FileManagerUI) setupUI() {
 			return len(ui.filteredFiles)
 		},
 		func() fyne.CanvasObject {
-			return widget.NewLabel("")
+			icon := widget.NewIcon(abletonIcon)
+			label := widget.NewLabel("")
+			return container.NewHBox(icon, label)
 		},
 		func(i widget.ListItemID, o fyne.CanvasObject) {
-			o.(*widget.Label).SetText(ui.filteredFiles[i].Name)
+			// Since the object is now a container, we need to get the label part of it to set the text
+			container := o.(*fyne.Container)
+			label := container.Objects[1].(*widget.Label)
+			label.SetText(ui.filteredFiles[i].Name)
 		},
 	)
 
@@ -73,6 +79,7 @@ func (ui *FileManagerUI) setupUI() {
 	ui.detailContainer.Add(toolbar)
 
 	scrollableFileList := container.NewVScroll(ui.fileList)
+
 	listContainer := container.NewBorder(searchEntry, nil, nil, nil, scrollableFileList)
 
 	// Top bar
