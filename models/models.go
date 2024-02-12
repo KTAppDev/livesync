@@ -8,7 +8,7 @@ import (
 // FileInfo represents information about a file.
 type FileInfo struct {
 	Name        string      // File name
-	Size        int64       // File size in bytes
+	Size        uint32      // File size in bytes
 	BPM         float64     // Beats per minute
 	Genre       string      // Genre of the file
 	Status      string      // Status of the file
