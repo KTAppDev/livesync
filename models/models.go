@@ -29,12 +29,12 @@ func (fi *FileInfo) NewFileInfoWithDefaults() {
 	fi.BPM = 0
 	fi.Genre = ""
 	fi.Status = ""
-	fi.Key = ""
+	fi.Key = "C#"
 	fi.Grade = ""
-	fi.ReleaseDate = ""
-	fi.CreatedAt = time.Time{}
-	fi.UpdatedAt = time.Time{}
+	fi.ReleaseDate = "This is the release date"
+	fi.CreatedAt = time.Now()
+	fi.UpdatedAt = time.Now()
 	fi.Path = ""
 	fi.Permissions = 0
-	fi.Modified = time.Time{}
+	fi.Modified = time.Now()
 }

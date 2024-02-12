@@ -137,7 +137,7 @@ func (ui *FileManagerUI) updateDetailView(id widget.ListItemID) {
 	))
 
 	// Add file details
-	ui.detailContainer.Add(widget.NewLabel(fmt.Sprintf("Name: %s", file.Name)))
+	ui.detailContainer.Add(widget.NewLabel(fmt.Sprintf("Name: %s", file.Path)))
 	ui.detailContainer.Add(widget.NewLabel(fmt.Sprintf("Size: %d", file.Size)))
 	ui.detailContainer.Add(widget.NewLabel(fmt.Sprintf("BPM: %.2f", file.BPM)))
 
@@ -163,7 +163,7 @@ func (ui *FileManagerUI) updateDetailView(id widget.ListItemID) {
 
 	ui.detailContainer.Add(widget.NewLabel(fmt.Sprintf("Release Date: %s", file.ReleaseDate)))
 	ui.detailContainer.Add(widget.NewLabel(fmt.Sprintf("Created At: %s", file.CreatedAt.Format("Jan 02, 2006"))))
-	ui.detailContainer.Add(widget.NewLabel(fmt.Sprintf("Updated At: %s", file.UpdatedAt.Format("Jan 02, 2006"))))
+	ui.detailContainer.Add(widget.NewLabel(fmt.Sprintf("Last Updated At: %s", file.Modified.Format("Jan 02, 2006"))))
 
 	// Refresh the container to display the new content
 	ui.detailContainer.Refresh()
