@@ -67,26 +67,13 @@ func (ui *FileManagerUI) setupUI() {
 
 	ui.detailContainer = container.NewVBox()
 
-	toolbar := container.NewHBox(
-		widget.NewButtonWithIcon("", theme.DocumentCreateIcon(), func() {}),
-		widget.NewButtonWithIcon("", theme.ContentCutIcon(), func() {}),
-		widget.NewButtonWithIcon("", theme.ContentCopyIcon(), func() {}),
-		widget.NewButtonWithIcon("", theme.ContentPasteIcon(), func() {}),
-		widget.NewSeparator(),
-		widget.NewButtonWithIcon("", theme.DeleteIcon(), func() {}),
-	)
-
-	ui.detailContainer.Add(toolbar)
-
 	scrollableFileList := container.NewVScroll(ui.fileList)
 
 	listContainer := container.NewBorder(searchEntry, nil, nil, nil, scrollableFileList)
 
 	// Top bar
 	topBar := widget.NewToolbar(
-		widget.NewToolbarAction(theme.ContentAddIcon(), func() {}),
 		widget.NewToolbarSpacer(),
-		widget.NewToolbarAction(theme.MailComposeIcon(), func() {}),
 		widget.NewToolbarAction(theme.HelpIcon(), func() {}),
 		widget.NewToolbarAction(theme.AccountIcon(), func() {}),
 	)
@@ -125,16 +112,6 @@ func (ui *FileManagerUI) updateDetailView(id widget.ListItemID) {
 
 	// Clear existing content
 	ui.detailContainer.Objects = nil
-
-	// Re-add the toolbar to the detail view
-	ui.detailContainer.Add(container.NewHBox(
-		widget.NewButtonWithIcon("", theme.DocumentCreateIcon(), func() {}),
-		widget.NewButtonWithIcon("", theme.ContentCutIcon(), func() {}),
-		widget.NewButtonWithIcon("", theme.ContentCopyIcon(), func() {}),
-		widget.NewButtonWithIcon("", theme.ContentPasteIcon(), func() {}),
-		widget.NewSeparator(),
-		widget.NewButtonWithIcon("", theme.DeleteIcon(), func() {}),
-	))
 
 	// Add file details
 	ui.detailContainer.Add(widget.NewLabel(fmt.Sprintf("Name: %s", file.Path)))
