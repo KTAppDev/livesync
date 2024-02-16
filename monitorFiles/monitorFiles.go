@@ -29,7 +29,7 @@ func MonitorFiles(directory string) {
 				} else if event.Op&fsnotify.Remove == fsnotify.Remove {
 					log.Println("file removed:", event.Name)
 				} else if event.Op&fsnotify.Rename == fsnotify.Rename {
-					log.Println("file renamed:", event.Name)
+					log.Println("file removed:", event.Name)
 				}
 
 			case err, ok := <-watcher.Errors:

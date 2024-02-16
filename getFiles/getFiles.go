@@ -27,7 +27,7 @@ func GetFiles(cwd string) ([]models.FileInfo, error) {
 			fileInfo.NewFileInfoWithDefaults()
 			fileInfo.Name = strings.SplitAfter(info.Name(), ".")[0][:len(strings.SplitAfter(info.Name(), ".")[0])-1] //This just removes the .extension part
 			fileInfo.Path = path
-			fileInfo.Size = uint32(info.Size()) // this is 4gb thats big enough
+			fileInfo.Size = uint32(info.Size()) // uint32 because this is 4gb thats big enough
 			fileInfo.Permissions = info.Mode()
 			fileInfo.Modified = info.ModTime()
 			if stat, ok := info.Sys().(*syscall.Stat_t); ok {
