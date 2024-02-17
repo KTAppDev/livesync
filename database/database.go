@@ -22,12 +22,10 @@ func InitDB(db *sql.DB) error {
         created_at TEXT,
         modified_at TEXT
     );`
-
 	_, err := db.Exec(createTableSQL)
 	if err != nil {
 		return err
 	}
-
 	log.Println("Database and table created successfully.")
 	return nil
 }
@@ -50,4 +48,23 @@ func LoadFilesFromDB(db *sql.DB) ([]models.FileInfo, error) {
 		files = append(files, file)
 	}
 	return files, nil
+}
+
+// Function to insert a file record into the 'files' table
+func InsertFileIntoDB(db *sql.DB, file models.FileInfo) error {
+	insertSQL := `
+		INSERT INTO files (name, size, bpm, genre, status, key, grade, release_date, created_at, modified_at)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
+
+	_, err := db.Exec(
+		insertSQL,
+		file.Name, file.Size, file.BPM, file.Genre, file.Status,
+		file.Key, file.Grade, file.ReleaseDate, file.CreatedAt, file.Modified,
+	)
+	if err != nil {
+		return err
+	}
+
+	log.Println("File inserted successfully.")
+	return nil
 }

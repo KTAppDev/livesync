@@ -35,10 +35,6 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	// for _, fileInfo := range allFiles {
-	// 	fmt.Printf("File: %s, Size: %d, Permissions: %s, Modified: %s\n",
-	// 		fileInfo.Path, fileInfo.Size, fileInfo.Permissions, fileInfo.Modified.Format(time.RFC3339))
-	// }
 
 	go monitorFiles.MonitorFiles(directory)
 
