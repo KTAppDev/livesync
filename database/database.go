@@ -33,14 +33,13 @@ func InitDB(db *sql.DB) error {
 		return err
 	}
 
-	log.Println("Database and table created successfully.")
 	return nil
 }
 
 // GetAllFilesFromDB retrieves all rows from the "files" table.
 func GetAllFilesFromDB(db *sql.DB) ([]models.FileInfo, error) {
 	// SQL query to retrieve all fields from the "files" table
-	query := `SELECT name, size, bpm, genre, status, key, grade, release_date, created_at, modified_at FROM files;`
+	query := `SELECT name, size, bpm, genre, status, key, grade, release_date, created_at, path, modified_at FROM files;`
 
 	// Execute the query
 	rows, err := db.Query(query)
@@ -56,7 +55,7 @@ func GetAllFilesFromDB(db *sql.DB) ([]models.FileInfo, error) {
 		var file models.FileInfo
 
 		// Scan the row into the FileInfo struct
-		err := rows.Scan(&file.Name, &file.Size, &file.BPM, &file.Genre, &file.Status, &file.Key, &file.Grade, &file.ReleaseDate, &file.CreatedAt, &file.ModifiedAt)
+		err := rows.Scan(&file.Name, &file.Size, &file.BPM, &file.Genre, &file.Status, &file.Key, &file.Grade, &file.ReleaseDate, &file.CreatedAt, &file.Path, &file.ModifiedAt)
 		if err != nil {
 			log.Println("Error scanning row:", err)
 			continue
