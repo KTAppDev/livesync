@@ -19,7 +19,7 @@ type FileInfo struct {
 	UpdatedAt   time.Time   // Last update time of the file
 	Path        string      // File path
 	Permissions fs.FileMode // File permissions
-	Modified    time.Time   // Last modified time
+	ModifiedAt  time.Time   // Last modified time
 }
 
 // NewFileInfoWithDefaults creates a new FileInfo instance with default values.
@@ -36,5 +36,5 @@ func (fi *FileInfo) NewFileInfoWithDefaults() {
 	fi.UpdatedAt = time.Now()
 	fi.Path = ""
 	fi.Permissions = 0
-	fi.Modified = time.Now()
+	fi.ModifiedAt = time.Now()
 }

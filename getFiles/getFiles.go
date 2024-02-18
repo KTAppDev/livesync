@@ -8,6 +8,7 @@ import (
 	"syscall"
 	"time"
 
+	// "github.com/ktappdev/filesync/database"
 	"github.com/ktappdev/filesync/models"
 )
 
@@ -29,7 +30,7 @@ func GetFiles(cwd string) ([]models.FileInfo, error) {
 			fileInfo.Path = path
 			fileInfo.Size = uint32(info.Size()) // uint32 because this is 4gb thats big enough
 			fileInfo.Permissions = info.Mode()
-			fileInfo.Modified = info.ModTime()
+			fileInfo.ModifiedAt = info.ModTime()
 			if stat, ok := info.Sys().(*syscall.Stat_t); ok {
 				creationTime := time.Unix(stat.Birthtimespec.Sec, 0)
 				fileInfo.CreatedAt = creationTime
