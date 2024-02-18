@@ -34,6 +34,7 @@ func NewFileManagerUI(app fyne.App, files []models.FileInfo) *FileManagerUI {
 
 // setupUI initializes the UI components and layouts.
 func (ui *FileManagerUI) setupUI() {
+	fmt.Println("setting up ui", ui.filteredFiles)
 	ui.window = ui.app.NewWindow("File Manager")
 	ui.window.Resize(fyne.NewSize(800, 600))
 	// abletonIcon :=
@@ -140,7 +141,7 @@ func (ui *FileManagerUI) updateDetailView(id widget.ListItemID) {
 
 	ui.detailContainer.Add(widget.NewLabel(fmt.Sprintf("Release Date: %s", file.ReleaseDate)))
 	ui.detailContainer.Add(widget.NewLabel(fmt.Sprintf("Created At: %s", file.CreatedAt.Format("Jan 02, 2006"))))
-	ui.detailContainer.Add(widget.NewLabel(fmt.Sprintf("Last Updated At: %s", file.Modified.Format("Jan 02, 2006"))))
+	ui.detailContainer.Add(widget.NewLabel(fmt.Sprintf("Last Updated At: %s", file.ModifiedAt.Format("Jan 02, 2006"))))
 
 	// Refresh the container to display the new content
 	ui.detailContainer.Refresh()
