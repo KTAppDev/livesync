@@ -34,13 +34,11 @@ func NewFileManagerUI(app fyne.App, files []models.FileInfo) *FileManagerUI {
 
 // setupUI initializes the UI components and layouts.
 func (ui *FileManagerUI) setupUI() {
-	fmt.Println("setting up ui", ui.filteredFiles)
-	ui.window = ui.app.NewWindow("File Manager")
+	ui.window = ui.app.NewWindow("Ableton Livesync")
 	ui.window.Resize(fyne.NewSize(800, 600))
-	// abletonIcon :=
 
 	searchEntry := widget.NewEntry()
-	searchEntry.SetPlaceHolder("Search files...")
+	searchEntry.SetPlaceHolder("Search Projects...")
 	searchEntry.OnChanged = func(text string) {
 		ui.updateFileList(text)
 	}
@@ -91,14 +89,21 @@ func (ui *FileManagerUI) setupUI() {
 }
 
 // updateFileList filters the file list based on the search query.
+
+// updateFileList filters the file list based on the search query.
 func (ui *FileManagerUI) updateFileList(query string) {
 	query = strings.ToLower(query)
-	ui.filteredFiles = nil // Reset the filtered list
+	ui.filteredFiles = make([]models.FileInfo, 0, len(ui.files))
 
 	for _, file := range ui.files {
-		if strings.Contains(strings.ToLower(file.Name), query) {
+		if strings.Contains(file.Name, query) {
 			ui.filteredFiles = append(ui.filteredFiles, file)
 		}
+	}
+
+	if len(ui.filteredFiles) == 0 {
+		ui.fileList.Refresh()
+		return
 	}
 
 	ui.fileList.Refresh()
@@ -110,12 +115,13 @@ func (ui *FileManagerUI) updateDetailView(id widget.ListItemID) {
 		return
 	}
 	file := ui.filteredFiles[id]
+	// fmt.Println(file)
 
 	// Clear existing content
 	ui.detailContainer.Objects = nil
 
 	// Add file details
-	ui.detailContainer.Add(widget.NewLabel(fmt.Sprintf("Name: %s", file.Path)))
+	ui.detailContainer.Add(widget.NewLabel(fmt.Sprintf("Path: %s", file.Path)))
 	ui.detailContainer.Add(widget.NewLabel(fmt.Sprintf("Size: %d", file.Size)))
 	ui.detailContainer.Add(widget.NewLabel(fmt.Sprintf("BPM: %.2f", file.BPM)))
 

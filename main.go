@@ -32,6 +32,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error retrieving files:", err)
 	}
+	// log.Println("this is all files", allFiles)
 
 	// Insert or update files in the database
 	err = database.InsertFilesIntoDB(db, allFiles)
