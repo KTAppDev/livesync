@@ -47,14 +47,14 @@ func (ui *FileManagerUI) setupUI() {
 			return len(ui.filteredFiles)
 		},
 		func() fyne.CanvasObject {
-			// icon := widget.NewIcon(resourceAbletonIcon512Jpg)
+			icon := widget.NewIcon(resourceAbletonIcon512Jpg)
 			label := widget.NewLabel("")
-			return container.NewHBox(label)
+			return container.NewHBox(icon, label)
 		},
 		func(i widget.ListItemID, o fyne.CanvasObject) {
 			// Since the object is now a container, we need to get the label part of it to set the text
 			container := o.(*fyne.Container)
-			label := container.Objects[0].(*widget.Label)
+			label := container.Objects[1].(*widget.Label)
 			label.SetText(ui.filteredFiles[i].Name)
 		},
 	)
@@ -155,4 +155,9 @@ func (ui *FileManagerUI) updateDetailView(id widget.ListItemID) {
 // Run starts the application, displaying the main window.
 func (ui *FileManagerUI) Run() {
 	ui.window.ShowAndRun()
+}
+
+// Implementing the required method for secure restorable state
+func (ui *FileManagerUI) ApplicationSupportsSecureRestorableState() bool {
+	return true
 }
