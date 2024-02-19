@@ -1,14 +1,14 @@
 package getFiles
 
 import (
-	"fmt"
+	// "fmt"
 	"io/fs"
+	"log"
 	"path/filepath"
 	"strings"
 	"syscall"
 	"time"
 
-	// "github.com/ktappdev/filesync/database"
 	"github.com/ktappdev/filesync/models"
 )
 
@@ -17,20 +17,21 @@ func GetFiles(cwd string) ([]models.FileInfo, error) {
 
 	err := filepath.WalkDir(cwd, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
+			log.Println(err)
 			return err
 		}
 		if !d.IsDir() {
 			relPath, err := filepath.Rel(cwd, path)
 			if err != nil {
+				log.Println(err)
 				return err
 			}
 
 			info, err := d.Info()
 			if err != nil {
+				log.Println(err)
 				return err
 			}
-
-			// fmt.Println(cwd + relPath)
 
 			fileInfo := models.FileInfo{}
 			fileInfo.NewFileInfoWithDefaults()
@@ -44,7 +45,7 @@ func GetFiles(cwd string) ([]models.FileInfo, error) {
 				creationTime := time.Unix(stat.Birthtimespec.Sec, 0)
 				fileInfo.CreatedAt = creationTime
 			} else {
-				fmt.Println("System specific info could not be asserted to *syscall.Stat_t")
+				// fmt.Println("System specific info could not be asserted to *syscall.Stat_t")
 			}
 
 			filesInfo = append(filesInfo, fileInfo)
@@ -53,6 +54,7 @@ func GetFiles(cwd string) ([]models.FileInfo, error) {
 	})
 
 	if err != nil {
+		log.Println(err)
 		return nil, err
 	}
 

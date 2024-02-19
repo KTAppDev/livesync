@@ -2,7 +2,7 @@ package database
 
 import (
 	"database/sql"
-	"log"
+	// "log"
 	"time"
 
 	"github.com/ktappdev/filesync/models"
@@ -57,7 +57,7 @@ func GetAllFilesFromDB(db *sql.DB) ([]models.FileInfo, error) {
 		// Scan the row into the FileInfo struct
 		err := rows.Scan(&file.Name, &file.Size, &file.BPM, &file.Genre, &file.Status, &file.Key, &file.Grade, &file.ReleaseDate, &file.CreatedAt, &file.Path, &file.ModifiedAt)
 		if err != nil {
-			log.Println("Error scanning row:", err)
+			// log.Println("Error scanning row:", err)
 			continue
 		}
 

@@ -20,10 +20,6 @@ func MonitorFiles(directory string) {
 				if !ok {
 					return
 				}
-				// log.Println("event:", event)
-				// if event.Op&fsnotify.Write == fsnotify.Write {
-				// 	log.Println("modified file:", event.Name)
-				// }
 				if event.Op&fsnotify.Create == fsnotify.Create {
 					log.Println("file added:", event.Name)
 				} else if event.Op&fsnotify.Remove == fsnotify.Remove {
