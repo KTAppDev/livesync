@@ -9,7 +9,7 @@ import (
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
-	"github.com/ktappdev/filesync/models" // Assuming the FileInfo struct and related logic are in the model package
+	"github.com/ktappdev/filesync/models"
 )
 
 // FileManagerUI holds the components and state for the File Manager UI.
@@ -22,7 +22,6 @@ type FileManagerUI struct {
 	detailContainer *fyne.Container
 }
 
-// NewFileManagerUI creates and initializes the File Manager UI.
 func NewFileManagerUI(app fyne.App, files []models.FileInfo) *FileManagerUI {
 	ui := &FileManagerUI{
 		app:   app,
@@ -48,14 +47,14 @@ func (ui *FileManagerUI) setupUI() {
 			return len(ui.filteredFiles)
 		},
 		func() fyne.CanvasObject {
-			icon := widget.NewIcon(abletonIcon)
+			// icon := widget.NewIcon(resourceAbletonIcon512Jpg)
 			label := widget.NewLabel("")
-			return container.NewHBox(icon, label)
+			return container.NewHBox(label)
 		},
 		func(i widget.ListItemID, o fyne.CanvasObject) {
 			// Since the object is now a container, we need to get the label part of it to set the text
 			container := o.(*fyne.Container)
-			label := container.Objects[1].(*widget.Label)
+			label := container.Objects[0].(*widget.Label)
 			label.SetText(ui.filteredFiles[i].Name)
 		},
 	)

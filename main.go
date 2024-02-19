@@ -2,7 +2,7 @@ package main
 
 import (
 	"database/sql"
-	"log"
+	// "log"
 
 	"fyne.io/fyne/v2/app"
 	"github.com/ktappdev/filesync/database"
@@ -17,33 +17,33 @@ func main() {
 	// Open a connection to the SQLite database file
 	db, err := sql.Open("sqlite3", "./file_manager.db")
 	if err != nil {
-		log.Fatal("Error opening database connection:", err)
+		// log.Fatal("Error opening database connection:", err)
 	}
 	defer db.Close()
 
 	// Initialize the database and create the table if it doesn't exist
 	err = database.InitDB(db)
 	if err != nil {
-		log.Fatal("Error initializing database:", err)
+		// log.Fatal("Error initializing database:", err)
 	}
 
 	// Retrieve files from the specified directory
 	allFiles, err := getFiles.GetFiles(directory)
 	if err != nil {
-		log.Fatal("Error retrieving files:", err)
+		// log.Fatal("Error retrieving files:", err)
 	}
 	// log.Println("this is all files", allFiles)
 
 	// Insert or update files in the database
 	err = database.InsertFilesIntoDB(db, allFiles)
 	if err != nil {
-		log.Fatal("Error inserting files into database:", err)
+		// log.Fatal("Error inserting files into database:", err)
 	}
 
 	// Retrieve all files from the database
 	allDbFiles, err := database.GetAllFilesFromDB(db)
 	if err != nil {
-		log.Fatal("Error retrieving files from database:", err)
+		// log.Fatal("Error retrieving files from database:", err)
 	}
 
 	// Initialize the Fyne app and UI
