@@ -174,9 +174,17 @@ func (ui *FileManagerUI) updateDetailView(id widget.ListItemID) {
 	gradeS := container.NewHBox(layout.NewSpacer(), widget.NewLabel("Grade:"), gradeSelect, layout.NewSpacer())
 	ui.detailContainer.Add(gradeS)
 
-	ui.detailContainer.Add(widget.NewLabel(fmt.Sprintf("Release Date: %s", file.ReleaseDate)))
-	ui.detailContainer.Add(widget.NewLabel(fmt.Sprintf("Created At: %s", file.CreatedAt.Format("Jan 02, 2006"))))
-	ui.detailContainer.Add(widget.NewLabel(fmt.Sprintf("Last Updated At: %s", file.ModifiedAt.Format("Jan 02, 2006"))))
+	releaseDate := widget.NewLabel(fmt.Sprintf("Release Date: %s", file.ReleaseDate))
+	releaseDate.Alignment = fyne.TextAlignCenter
+	ui.detailContainer.Add(releaseDate)
+
+	createdAt := widget.NewLabel(fmt.Sprintf("Created At: %s", file.CreatedAt.Format("Jan 02, 2006")))
+	createdAt.Alignment = fyne.TextAlignCenter
+	ui.detailContainer.Add(createdAt)
+
+	updatedAt := widget.NewLabel(fmt.Sprintf("Updated At: %s", file.UpdatedAt.Format("Jan 02, 2006")))
+	updatedAt.Alignment = fyne.TextAlignCenter
+	ui.detailContainer.Add(updatedAt)
 
 	// Refresh the container to display the new content
 	ui.detailContainer.Refresh()
