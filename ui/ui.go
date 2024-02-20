@@ -34,7 +34,7 @@ func NewFileManagerUI(app fyne.App, files []models.FileInfo) *FileManagerUI {
 // setupUI initializes the UI components and layouts.
 func (ui *FileManagerUI) setupUI() {
 	ui.window = ui.app.NewWindow("Ableton Livesync")
-	ui.window.Resize(fyne.NewSize(800, 600))
+	ui.window.Resize(fyne.NewSize(1280, 600))
 
 	searchEntry := widget.NewEntry()
 	searchEntry.SetPlaceHolder("Search Projects...")
@@ -67,9 +67,9 @@ func (ui *FileManagerUI) setupUI() {
 	ui.fileList.OnSelected = func(id widget.ListItemID) {
 		ui.updateDetailView(id)
 	}
-	numFiles := len(ui.filteredFiles)
+	numFiles := len(ui.files)
 
-	infoLbl := widget.NewLabel(fmt.Sprintf("Found %d projects", numFiles))
+	infoLbl := widget.NewLabel(fmt.Sprintf("%d Projects", numFiles))
 	ui.detailContainer = container.NewVBox()
 
 	scrollableFileList := container.NewVScroll(ui.fileList)
@@ -84,7 +84,7 @@ func (ui *FileManagerUI) setupUI() {
 	)
 
 	split := container.NewHSplit(listContainer, ui.detailContainer)
-	split.Offset = 0.3
+	split.Offset = 0.4
 
 	borderLayout := layout.NewBorderLayout(topBar, nil, nil, nil)
 	allContent := container.New(borderLayout, topBar, split)
@@ -120,13 +120,26 @@ func (ui *FileManagerUI) updateDetailView(id widget.ListItemID) {
 		return
 	}
 	file := ui.filteredFiles[id]
-	// fmt.Println(file)
 
 	// Clear existing content
 	ui.detailContainer.Objects = nil
 
 	// Add file details
-	ui.detailContainer.Add(widget.NewLabel(fmt.Sprintf("Path: %s", file.Path)))
+	// example of how to style a label
+	projectNameLabel := widget.NewLabelWithStyle(
+		file.Name,
+		fyne.TextAlignCenter,
+		fyne.TextStyle{
+			Bold: true,
+		},
+	)
+	pathLabel := widget.NewLabel(fmt.Sprintf("Path: %s", file.Path))
+	projectNameLabel.Wrapping = fyne.TextWrapWord
+
+	pathLabel.Wrapping = fyne.TextWrapWord
+
+	ui.detailContainer.Add(projectNameLabel)
+	ui.detailContainer.Add(pathLabel)
 	ui.detailContainer.Add(widget.NewLabel(fmt.Sprintf("Size: %d", file.Size)))
 	ui.detailContainer.Add(widget.NewLabel(fmt.Sprintf("BPM: %.2f", file.BPM)))
 

@@ -10,6 +10,7 @@ import (
 	"github.com/ktappdev/filesync/getFiles"
 
 	"github.com/ktappdev/filesync/logging"
+	"github.com/ktappdev/filesync/theme"
 	"github.com/ktappdev/filesync/ui"
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -54,6 +55,7 @@ func main() {
 
 	// Initialize the Fyne app and UI
 	a := app.New()
+	a.Settings().SetTheme(theme.NewMyTheme())
 	w := ui.NewFileManagerUI(a, allDbFiles)
 
 	w.Run()
