@@ -143,28 +143,36 @@ func (ui *FileManagerUI) updateDetailView(id widget.ListItemID) {
 	ui.detailContainer.Add(projectName)
 	ui.detailContainer.Add(widget.NewSeparator())
 	ui.detailContainer.Add(pathLabel)
-	ui.detailContainer.Add(widget.NewLabel(fmt.Sprintf("Size: %d", file.Size)))
-	ui.detailContainer.Add(widget.NewLabel(fmt.Sprintf("BPM: %.2f", file.BPM)))
 
-	// Genre selection
+	fileSizeFloat := float64(file.Size) / (1024 * 1024)
+	formattedSize := fmt.Sprintf("Size: %.2f MB", fileSizeFloat)
+	fileSize := widget.NewLabel(formattedSize)
+	fileSize.Alignment = fyne.TextAlignCenter
+	ui.detailContainer.Add(fileSize)
+
+	bpmLabel := widget.NewLabel(fmt.Sprintf("BPM: %.2f", file.BPM))
+	bpmLabel.Alignment = fyne.TextAlignCenter
+	ui.detailContainer.Add(bpmLabel)
+
 	genreSelect := widget.NewSelect([]string{"Hip-Hop", "Jazz"}, func(value string) { file.Genre = value })
 	genreSelect.SetSelected(file.Genre)
-	ui.detailContainer.Add(container.NewHBox(widget.NewLabel("Genre:"), genreSelect))
+	genreS := container.NewHBox(layout.NewSpacer(), widget.NewLabel("Genre:"), genreSelect, layout.NewSpacer())
+	ui.detailContainer.Add(genreS)
 
-	// Status selection
 	statusSelect := widget.NewSelect([]string{"WIP", "Upcoming"}, func(value string) { file.Status = value })
 	statusSelect.SetSelected(file.Status)
-	ui.detailContainer.Add(container.NewHBox(widget.NewLabel("Status:"), statusSelect))
+	statusS := container.NewHBox(layout.NewSpacer(), widget.NewLabel("Status:"), statusSelect, layout.NewSpacer())
+	ui.detailContainer.Add(statusS)
 
-	// Key selection
 	keySelect := widget.NewSelect([]string{"C#", "Bb"}, func(value string) { file.Key = value })
 	keySelect.SetSelected(file.Key)
-	ui.detailContainer.Add(container.NewHBox(widget.NewLabel("Key:"), keySelect))
+	keyS := container.NewHBox(layout.NewSpacer(), widget.NewLabel("Key:"), keySelect, layout.NewSpacer())
+	ui.detailContainer.Add(keyS)
 
-	// Grade selection
 	gradeSelect := widget.NewSelect([]string{"S", "D"}, func(value string) { file.Grade = value })
 	gradeSelect.SetSelected(file.Grade)
-	ui.detailContainer.Add(container.NewHBox(widget.NewLabel("Grade:"), gradeSelect))
+	gradeS := container.NewHBox(layout.NewSpacer(), widget.NewLabel("Grade:"), gradeSelect, layout.NewSpacer())
+	ui.detailContainer.Add(gradeS)
 
 	ui.detailContainer.Add(widget.NewLabel(fmt.Sprintf("Release Date: %s", file.ReleaseDate)))
 	ui.detailContainer.Add(widget.NewLabel(fmt.Sprintf("Created At: %s", file.CreatedAt.Format("Jan 02, 2006"))))
