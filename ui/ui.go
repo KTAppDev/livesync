@@ -2,9 +2,11 @@ package ui
 
 import (
 	"fmt"
+	"image/color"
 	"strings"
 
 	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/theme"
@@ -60,6 +62,7 @@ func (ui *FileManagerUI) setupUI() {
 			labelNumber.Text = fmt.Sprint(i + 1)
 			label := container.Objects[2].(*widget.Label)
 			label.SetText(ui.filteredFiles[i].Name)
+			label.TextStyle.Bold = true
 			labelNumber.Refresh()
 		},
 	)
@@ -71,6 +74,7 @@ func (ui *FileManagerUI) setupUI() {
 
 	infoLbl := widget.NewLabel(fmt.Sprintf("%d Projects", numFiles))
 	ui.detailContainer = container.NewVBox()
+	// Align all children to the center vertically
 
 	scrollableFileList := container.NewVScroll(ui.fileList)
 
@@ -126,19 +130,18 @@ func (ui *FileManagerUI) updateDetailView(id widget.ListItemID) {
 
 	// Add file details
 	// example of how to style a label
-	projectNameLabel := widget.NewLabelWithStyle(
-		file.Name,
-		fyne.TextAlignCenter,
-		fyne.TextStyle{
-			Bold: true,
-		},
-	)
+
 	pathLabel := widget.NewLabel(fmt.Sprintf("Path: %s", file.Path))
-	projectNameLabel.Wrapping = fyne.TextWrapWord
-
 	pathLabel.Wrapping = fyne.TextWrapWord
+	pathLabel.Alignment = fyne.TextAlignCenter
 
-	ui.detailContainer.Add(projectNameLabel)
+	projectName := canvas.NewText(file.Name, color.NRGBA{R: 173, G: 216, B: 255, A: 255})
+	projectName.TextSize = 20.0
+	projectName.Alignment = fyne.TextAlignCenter
+	projectName.TextStyle = fyne.TextStyle{Bold: true}
+
+	ui.detailContainer.Add(projectName)
+	ui.detailContainer.Add(widget.NewSeparator())
 	ui.detailContainer.Add(pathLabel)
 	ui.detailContainer.Add(widget.NewLabel(fmt.Sprintf("Size: %d", file.Size)))
 	ui.detailContainer.Add(widget.NewLabel(fmt.Sprintf("BPM: %.2f", file.BPM)))
