@@ -5,8 +5,6 @@ import (
 	"log"
 	"os/user"
 
-	// "log"
-
 	"fyne.io/fyne/v2/app"
 	"github.com/ktappdev/filesync/database"
 	"github.com/ktappdev/filesync/getFiles"
@@ -17,12 +15,12 @@ import (
 )
 
 func main() {
-	usr, _ := user.Current()
-	// if err != nil {
-	// 	log.Fatal("Error getting executable path:", err)
-	// }
+	usr, err := user.Current()
+	if err != nil {
+		log.Fatal("Error getting executable path:", err)
+	}
 	logging.Setup(usr.HomeDir + "/livesync")
-	directory := usr.HomeDir + "/developer/javascript/"
+	directory := usr.HomeDir + "/Desktop/"
 
 	// Open a connection to the SQLite database file
 	db, err := sql.Open("sqlite3", usr.HomeDir+"/livesync/file_manager.db")
@@ -41,7 +39,6 @@ func main() {
 	if err != nil {
 		log.Fatal("Error retrieving files:", err)
 	}
-	// log.Println("this is all files", allFiles)
 
 	// Insert or update files in the database
 	err = database.InsertFilesIntoDB(db, allFiles)

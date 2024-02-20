@@ -49,25 +49,32 @@ func (ui *FileManagerUI) setupUI() {
 		func() fyne.CanvasObject {
 			icon := widget.NewIcon(resourceAbletonIcon512Jpg)
 			label := widget.NewLabel("")
-			return container.NewHBox(icon, label)
+			labelNumber := widget.NewLabel("")
+
+			return container.NewHBox(labelNumber, icon, label)
 		},
 		func(i widget.ListItemID, o fyne.CanvasObject) {
 			// Since the object is now a container, we need to get the label part of it to set the text
 			container := o.(*fyne.Container)
-			label := container.Objects[1].(*widget.Label)
+			labelNumber := container.Objects[0].(*widget.Label)
+			labelNumber.Text = fmt.Sprint(i + 1)
+			label := container.Objects[2].(*widget.Label)
 			label.SetText(ui.filteredFiles[i].Name)
+			labelNumber.Refresh()
 		},
 	)
 
 	ui.fileList.OnSelected = func(id widget.ListItemID) {
 		ui.updateDetailView(id)
 	}
+	numFiles := len(ui.filteredFiles)
 
+	infoLbl := widget.NewLabel(fmt.Sprintf("Found %d projects", numFiles))
 	ui.detailContainer = container.NewVBox()
 
 	scrollableFileList := container.NewVScroll(ui.fileList)
 
-	listContainer := container.NewBorder(searchEntry, nil, nil, nil, scrollableFileList)
+	listContainer := container.NewBorder(searchEntry, infoLbl, nil, nil, scrollableFileList)
 
 	// Top bar
 	topBar := widget.NewToolbar(
@@ -88,14 +95,12 @@ func (ui *FileManagerUI) setupUI() {
 }
 
 // updateFileList filters the file list based on the search query.
-
-// updateFileList filters the file list based on the search query.
 func (ui *FileManagerUI) updateFileList(query string) {
 	query = strings.ToLower(query)
 	ui.filteredFiles = make([]models.FileInfo, 0, len(ui.files))
 
 	for _, file := range ui.files {
-		if strings.Contains(file.Name, query) {
+		if strings.Contains(strings.ToLower(file.Name), query) {
 			ui.filteredFiles = append(ui.filteredFiles, file)
 		}
 	}
@@ -106,6 +111,7 @@ func (ui *FileManagerUI) updateFileList(query string) {
 	}
 
 	ui.fileList.Refresh()
+	ui.detailContainer.Objects = nil
 }
 
 // updateDetailView updates the detail view based on the selected file.
