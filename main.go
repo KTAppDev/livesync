@@ -20,11 +20,14 @@ func main() {
 	if err != nil {
 		log.Fatal("Error getting executable path:", err)
 	}
-	logging.Setup(usr.HomeDir + "/livesync")
-	directory := usr.HomeDir + "/Desktop/"
+
+	homeDir := usr.HomeDir
+
+	directory := homeDir + "/Desktop/"
+	logging.Setup(homeDir + "/livesync")
 
 	// Open a connection to the SQLite database file
-	db, err := sql.Open("sqlite3", usr.HomeDir+"/livesync/file_manager.db")
+	db, err := sql.Open("sqlite3", homeDir+"/livesync/file_manager.db")
 	if err != nil {
 	}
 	defer db.Close()

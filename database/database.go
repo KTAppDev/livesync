@@ -2,32 +2,35 @@ package database
 
 import (
 	"database/sql"
-	// "log"
+	"log"
 	"time"
 
 	"github.com/ktappdev/filesync/models"
 )
 
+// InitDB initializes the database by creating the "files" table if it does not exist.
 func InitDB(db *sql.DB) error {
+	// SQL statement to create the "files" table
 	createTableSQL := `
 		CREATE TABLE IF NOT EXISTS files (
-    name TEXT UNIQUE,
-    size INTEGER,
-    bpm REAL,
-    genre TEXT,
-    status TEXT,
-    key TEXT,
-    grade TEXT,
-    release_date TEXT, -- Use TEXT for simplicity, consider a proper DATE type in your database
-    created_at DATETIME,
-    updated_at DATETIME,
-    path TEXT,
-    permissions INTEGER, -- Use INTEGER for FileMode
-    modified_at DATETIME,
-    PRIMARY KEY (name)
-);
+			name TEXT UNIQUE,
+			size INTEGER,
+			bpm REAL,
+			genre TEXT,
+			status TEXT,
+			key TEXT,
+			grade TEXT,
+			release_date TEXT, -- Use TEXT for simplicity, consider a proper DATE type in your database
+			created_at DATETIME,
+			updated_at DATETIME,
+			path TEXT,
+			permissions INTEGER, -- Use INTEGER for FileMode
+			modified_at DATETIME,
+			PRIMARY KEY (name)
+		);
 	`
 
+	// Execute the SQL statement to create the table
 	_, err := db.Exec(createTableSQL)
 	if err != nil {
 		return err
@@ -36,7 +39,7 @@ func InitDB(db *sql.DB) error {
 	return nil
 }
 
-// GetAllFilesFromDB retrieves all rows from the "files" table.
+// GetAllFilesFromDB retrieves all rows from the "files" table and returns a slice of models.FileInfo.
 func GetAllFilesFromDB(db *sql.DB) ([]models.FileInfo, error) {
 	// SQL query to retrieve all fields from the "files" table
 	query := `SELECT name, size, bpm, genre, status, key, grade, release_date, created_at, path, modified_at FROM files;`
@@ -73,6 +76,7 @@ func GetAllFilesFromDB(db *sql.DB) ([]models.FileInfo, error) {
 	return files, nil
 }
 
+// InsertFilesIntoDB inserts or updates a slice of models.FileInfo into the "files" table.
 func InsertFilesIntoDB(db *sql.DB, files []models.FileInfo) error {
 	tx, err := db.Begin() // Start a transaction for efficiency
 	if err != nil {
@@ -92,8 +96,8 @@ func InsertFilesIntoDB(db *sql.DB, files []models.FileInfo) error {
 
 	// Prepared statement for insertion/update
 	insertSQL := `
-    INSERT OR REPLACE INTO files (name, size, bpm, genre, status, key, grade, release_date, created_at, updated_at, path, permissions, modified_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+		INSERT OR REPLACE INTO files (name, size, bpm, genre, status, key, grade, release_date, created_at, updated_at, path, permissions, modified_at)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 	`
 
 	for _, file := range files {
@@ -122,7 +126,7 @@ func InsertFilesIntoDB(db *sql.DB, files []models.FileInfo) error {
 				if err != nil {
 					return err
 				}
-				// log.Printf("File %s already exists, updated with newer version.", file.Name)
+				log.Printf("File %s already exists, updated with newer version.", file.Name)
 			} else {
 				// log.Printf("File %s already exists with the same content, skipping update.", file.Name)
 			}
