@@ -12,16 +12,16 @@ import (
 	"github.com/ktappdev/filesync/models"
 )
 
-func GetFiles(cwd string) ([]models.FileInfo, error) {
+func GetFiles(projectsDirectory string) ([]models.FileInfo, error) {
 	var filesInfo []models.FileInfo
 
-	err := filepath.WalkDir(cwd, func(path string, d fs.DirEntry, err error) error {
+	err := filepath.WalkDir(projectsDirectory, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
 			log.Println(err)
 			return err
 		}
 		if !d.IsDir() {
-			relPath, err := filepath.Rel(cwd, path)
+			relPath, err := filepath.Rel(projectsDirectory, path)
 			if err != nil {
 				log.Println(err)
 				return err
@@ -36,7 +36,7 @@ func GetFiles(cwd string) ([]models.FileInfo, error) {
 			fileInfo := models.FileInfo{}
 			fileInfo.NewFileInfoWithDefaults()
 			fileInfo.Name = strings.SplitAfter(info.Name(), ".")[0][:len(strings.SplitAfter(info.Name(), ".")[0])-1]
-			fileInfo.Path = cwd + relPath
+			fileInfo.Path = projectsDirectory + relPath
 			fileInfo.Size = uint32(info.Size())
 			fileInfo.Permissions = info.Mode()
 			fileInfo.ModifiedAt = info.ModTime()
