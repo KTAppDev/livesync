@@ -184,7 +184,7 @@ func (ui *FileManagerUI) updateDetailView(id widget.ListItemID) {
 	gradeSelect.SetSelected(file.Grade)
 	gradeS := container.NewHBox(spacer, spacer, widget.NewLabel("Grade:"), spacer, gradeSelect, spacer, spacer)
 
-	keyLabel := widget.NewLabel(fmt.Sprintf(file.Key))
+	keyLabel := widget.NewLabel(fmt.Sprintf(file.Key, "Major"))
 	// bpmLabel.Alignment = fyne.TextAlignCenter
 	keyS := container.NewHBox(spacer, widget.NewLabel("Key:"), keyLabel, spacer)
 
