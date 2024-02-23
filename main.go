@@ -16,6 +16,12 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+func checkError(err error, message string) {
+	if err != nil {
+		log.Fatal(message, err)
+	}
+}
+
 func main() {
 	alsSourcePath := "/Users/kentaylor/developer/go-projects/livesync/ap/ap/ableton12.als"
 
@@ -39,30 +45,24 @@ func main() {
 
 	// Open a connection to the SQLite database file
 	db, err := sql.Open("sqlite3", homeDir+"/livesync/file_manager.db")
-	if err != nil {
-	}
+	checkError(err, "Failed to open database:")
 	defer db.Close()
 
 	// Initialize the database and create the table if it doesn't exist
 	err = database.InitDB(db)
-	if err != nil {
-		log.Fatal("Error initializing database:", err)
-	}
+	checkError(err, "Failed to init database:")
+
+	database.UpdateFirstRunSetting(db, true)
+	checkError(err, "Failed to update first run setting:")
 
 	allFiles, err := getFiles.GetFiles(directory)
-	if err != nil {
-		log.Fatal("Error retrieving files:", err)
-	}
+	checkError(err, "Failed to get files:")
 
 	err = database.InsertFilesIntoDB(db, allFiles)
-	if err != nil {
-		log.Fatal("Error inserting files into database:", err)
-	}
+	checkError(err, "Failed to insert files into database:")
 
 	allDbFiles, err := database.GetAllFilesFromDB(db)
-	if err != nil {
-		log.Fatal("Error retrieving files from database:", err)
-	}
+	checkError(err, "Failed to get files from database:")
 
 	a := app.New()
 	a.Settings().SetTheme(theme.NewMyTheme())
