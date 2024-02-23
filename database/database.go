@@ -85,6 +85,7 @@ func InsertFilesIntoDB(db *sql.DB, files []models.FileInfo) error {
 
 	defer func() {
 		if err != nil {
+			log.Println("Error:", err, "Performing ROLLBACK")
 			tx.Rollback() // Rollback if any error occurs
 		} else {
 			tx.Commit() // Commit if all insertions/updates are successful
@@ -126,7 +127,7 @@ func InsertFilesIntoDB(db *sql.DB, files []models.FileInfo) error {
 				if err != nil {
 					return err
 				}
-				log.Printf("File %s already exists, updated with newer version.", file.Name)
+				// log.Printf("File %s already exists, updated with newer version.", file.Name)
 			} else {
 				// log.Printf("File %s already exists with the same content, skipping update.", file.Name)
 			}

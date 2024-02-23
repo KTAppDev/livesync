@@ -19,12 +19,12 @@ import (
 func main() {
 	alsSourcePath := "/Users/kentaylor/developer/go-projects/livesync/ap/ap/ableton12.als"
 
-	value, err := parser.ExtractALS(alsSourcePath)
+	alsData, err := parser.ExtractALS(alsSourcePath)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	log.Printf("Tempo Value: %s BPM\n", value)
+	log.Printf("ALS DATA -> %+v", *alsData)
 	///////
 
 	usr, err := user.Current()

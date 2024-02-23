@@ -120,6 +120,8 @@ func (ui *FileManagerUI) updateFileList(query string) {
 
 // updateDetailView updates the detail view based on the selected file.
 func (ui *FileManagerUI) updateDetailView(id widget.ListItemID) {
+	spacer := layout.NewSpacer()
+
 	if id >= len(ui.filteredFiles) {
 		return
 	}
@@ -150,41 +152,45 @@ func (ui *FileManagerUI) updateDetailView(id widget.ListItemID) {
 	fileSize.Alignment = fyne.TextAlignCenter
 	ui.detailContainer.Add(fileSize)
 
-	bpmLabel := widget.NewLabel(fmt.Sprintf("BPM: %.2f", file.BPM))
+	bpmLabel := widget.NewLabel(fmt.Sprintf("%.2f", file.BPM))
 	bpmLabel.Alignment = fyne.TextAlignCenter
-	ui.detailContainer.Add(bpmLabel)
+	bppmHBox := container.NewHBox(spacer, spacer, widget.NewLabel("BPM:"), spacer, bpmLabel, spacer, spacer)
+	ui.detailContainer.Add(bppmHBox)
+
+	releaseDate := widget.NewLabel(file.UpdatedAt.Format("Jan 02, 2006"))
+	releaseDate.Alignment = fyne.TextAlignCenter
+	releasedHBox := container.NewHBox(spacer, spacer, widget.NewLabel("Release Date:"), spacer, releaseDate, spacer, spacer)
+	ui.detailContainer.Add(releasedHBox)
+
+	createdAt := widget.NewLabel(file.CreatedAt.Format("Jan 02, 2006"))
+	createdAt.Alignment = fyne.TextAlignCenter
+	createdAtHBox := container.NewHBox(spacer, spacer, widget.NewLabel("Created At:"), spacer, createdAt, spacer, spacer)
+	ui.detailContainer.Add(createdAtHBox)
+
+	updatedAt := widget.NewLabel(file.UpdatedAt.Format("Jan 02, 2006"))
+	updatedAt.Alignment = fyne.TextAlignCenter
+	updateHBox := container.NewHBox(spacer, spacer, widget.NewLabel("Updated At:"), spacer, updatedAt, spacer, spacer)
+	ui.detailContainer.Add(updateHBox)
 
 	genreSelect := widget.NewSelect([]string{"Hip-Hop", "Jazz"}, func(value string) { file.Genre = value })
 	genreSelect.SetSelected(file.Genre)
-	genreS := container.NewHBox(layout.NewSpacer(), widget.NewLabel("Genre:"), genreSelect, layout.NewSpacer())
-	ui.detailContainer.Add(genreS)
+	genreS := container.NewHBox(spacer, spacer, widget.NewLabel("Genre:"), spacer, genreSelect, spacer, spacer)
 
 	statusSelect := widget.NewSelect([]string{"WIP", "Upcoming"}, func(value string) { file.Status = value })
 	statusSelect.SetSelected(file.Status)
-	statusS := container.NewHBox(layout.NewSpacer(), widget.NewLabel("Status:"), statusSelect, layout.NewSpacer())
-	ui.detailContainer.Add(statusS)
-
-	keySelect := widget.NewSelect([]string{"C#", "Bb"}, func(value string) { file.Key = value })
-	keySelect.SetSelected(file.Key)
-	keyS := container.NewHBox(layout.NewSpacer(), widget.NewLabel("Key:"), keySelect, layout.NewSpacer())
-	ui.detailContainer.Add(keyS)
+	statusS := container.NewHBox(spacer, spacer, widget.NewLabel("Status:"), spacer, statusSelect, spacer, spacer)
 
 	gradeSelect := widget.NewSelect([]string{"S", "D"}, func(value string) { file.Grade = value })
 	gradeSelect.SetSelected(file.Grade)
-	gradeS := container.NewHBox(layout.NewSpacer(), widget.NewLabel("Grade:"), gradeSelect, layout.NewSpacer())
-	ui.detailContainer.Add(gradeS)
+	gradeS := container.NewHBox(spacer, spacer, widget.NewLabel("Grade:"), spacer, gradeSelect, spacer, spacer)
 
-	releaseDate := widget.NewLabel(fmt.Sprintf("Release Date: %s", file.ReleaseDate))
-	releaseDate.Alignment = fyne.TextAlignCenter
-	ui.detailContainer.Add(releaseDate)
+	keyLabel := widget.NewLabel(fmt.Sprintf(file.Key))
+	// bpmLabel.Alignment = fyne.TextAlignCenter
+	keyS := container.NewHBox(spacer, widget.NewLabel("Key:"), keyLabel, spacer)
 
-	createdAt := widget.NewLabel(fmt.Sprintf("Created At: %s", file.CreatedAt.Format("Jan 02, 2006")))
-	createdAt.Alignment = fyne.TextAlignCenter
-	ui.detailContainer.Add(createdAt)
-
-	updatedAt := widget.NewLabel(fmt.Sprintf("Updated At: %s", file.UpdatedAt.Format("Jan 02, 2006")))
-	updatedAt.Alignment = fyne.TextAlignCenter
-	ui.detailContainer.Add(updatedAt)
+	// spacer := layout.NewSpacer()
+	selectsBox := container.NewVBox(genreS, statusS, gradeS, keyS)
+	ui.detailContainer.Add(selectsBox)
 
 	// Refresh the container to display the new content
 	ui.detailContainer.Refresh()
