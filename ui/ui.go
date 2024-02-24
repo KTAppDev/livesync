@@ -36,7 +36,7 @@ func NewFileManagerUI(app fyne.App, files []models.FileInfo) *FileManagerUI {
 // setupUI initializes the UI components and layouts.
 func (ui *FileManagerUI) setupUI() {
 	ui.window = ui.app.NewWindow("Ableton Livesync")
-	ui.window.Resize(fyne.NewSize(1280, 600))
+	ui.window.Resize(fyne.NewSize(800, 500))
 
 	searchEntry := widget.NewEntry()
 	searchEntry.SetPlaceHolder("Search Projects...")
@@ -60,9 +60,10 @@ func (ui *FileManagerUI) setupUI() {
 			container := o.(*fyne.Container)
 			labelNumber := container.Objects[0].(*widget.Label)
 			labelNumber.Text = fmt.Sprint(i + 1)
-			label := container.Objects[2].(*widget.Label)
-			label.SetText(ui.filteredFiles[i].Name)
-			label.TextStyle.Bold = true
+			labelNumber.TextStyle.Bold = false
+			projectLabel := container.Objects[2].(*widget.Label)
+			projectLabel.SetText(ui.filteredFiles[i].Name)
+			projectLabel.TextStyle.Bold = false
 			labelNumber.Refresh()
 		},
 	)
@@ -137,15 +138,14 @@ func (ui *FileManagerUI) updateDetailView(id widget.ListItemID) {
 	// pathLabel.Wrapping = fyne.TextWrapWord
 	// pathLabel.Alignment = fyne.TextAlignCenter
 
-	projectName := canvas.NewText(file.Name, color.NRGBA{R: 173, G: 216, B: 255, A: 255})
-	projectName.TextSize = 20.0
+	projectName := canvas.NewText(file.Name, color.Black)
+	projectName.TextSize = 12.0
 	projectName.Alignment = fyne.TextAlignCenter
 	projectName.TextStyle = fyne.TextStyle{Bold: true}
 	ui.detailContainer.Add(projectName)
 
 	ui.detailContainer.Add(widget.NewSeparator())
 	// ui.detailContainer.Add(pathLabel)
-
 	fileSizeFloat := float64(file.Size) / (1024 * 1024)
 	formattedSize := fmt.Sprintf("Size: %.2f MB", fileSizeFloat)
 	fileSize := widget.NewLabel(formattedSize)
