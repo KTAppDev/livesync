@@ -131,13 +131,6 @@ func (ui *FileManagerUI) updateDetailView(id widget.ListItemID) {
 	// Clear existing content
 	ui.detailContainer.Objects = nil
 
-	// Add file details
-	// example of how to style a label
-
-	// pathLabel := widget.NewLabel(fmt.Sprintf("Path: %s", file.Path))
-	// pathLabel.Wrapping = fyne.TextWrapWord
-	// pathLabel.Alignment = fyne.TextAlignCenter
-
 	projectName := canvas.NewText(file.Name, color.Black)
 	projectName.TextSize = 12.0
 	projectName.Alignment = fyne.TextAlignCenter
