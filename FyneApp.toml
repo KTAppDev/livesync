@@ -1,0 +1,8 @@
+Website = "https://example.com"
+
+[Details]
+  Icon = "Icon.png"
+  Name = "Live Sync"
+  ID = "com.lugetech.app"
+  Version = "0.0.1"
+  Build = 3

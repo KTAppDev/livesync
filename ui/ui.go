@@ -10,8 +10,11 @@ import (
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/theme"
+
+	// "fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 	"github.com/ktappdev/filesync/models"
+	"github.com/ktappdev/filesync/ui/topbar"
 )
 
 // FileManagerUI holds the components and state for the File Manager UI.
@@ -39,6 +42,7 @@ func (ui *FileManagerUI) setupUI() {
 	ui.window.Resize(fyne.NewSize(800, 500))
 
 	searchEntry := widget.NewEntry()
+	searchEntry.ActionItem = widget.NewButtonWithIcon("", theme.CancelIcon(), func() { searchEntry.SetText("") })
 	searchEntry.SetPlaceHolder("Search Projects...")
 	searchEntry.OnChanged = func(text string) {
 		ui.updateFileList(text)
@@ -63,7 +67,7 @@ func (ui *FileManagerUI) setupUI() {
 			labelNumber.TextStyle.Bold = false
 			projectLabel := container.Objects[2].(*widget.Label)
 			projectLabel.SetText(ui.filteredFiles[i].Name)
-			projectLabel.TextStyle.Bold = false
+			projectLabel.TextStyle.Bold = true
 			labelNumber.Refresh()
 		},
 	)
@@ -82,14 +86,10 @@ func (ui *FileManagerUI) setupUI() {
 	listContainer := container.NewBorder(searchEntry, infoLbl, nil, nil, scrollableFileList)
 
 	// Top bar
-	topBar := widget.NewToolbar(
-		widget.NewToolbarSpacer(),
-		widget.NewToolbarAction(theme.HelpIcon(), func() {}),
-		widget.NewToolbarAction(theme.AccountIcon(), func() {}),
-	)
+	topBar := topbar.DisplayTopBar()
 
 	split := container.NewHSplit(listContainer, ui.detailContainer)
-	split.Offset = 0.4
+	split.Offset = 0.5
 
 	borderLayout := layout.NewBorderLayout(topBar, nil, nil, nil)
 	allContent := container.New(borderLayout, topBar, split)
@@ -135,58 +135,59 @@ func (ui *FileManagerUI) updateDetailView(id widget.ListItemID) {
 	projectName.TextSize = 12.0
 	projectName.Alignment = fyne.TextAlignCenter
 	projectName.TextStyle = fyne.TextStyle{Bold: true}
-	ui.detailContainer.Add(projectName)
+	projectNameWithPadding := container.NewPadded(projectName)
 
-	ui.detailContainer.Add(widget.NewSeparator())
-	// ui.detailContainer.Add(pathLabel)
+	// ui.detailContainer.Add(widget.NewSeparator())
 	fileSizeFloat := float64(file.Size) / (1024 * 1024)
-	formattedSize := fmt.Sprintf("Size: %.2f MB", fileSizeFloat)
-	fileSize := widget.NewLabel(formattedSize)
-	fileSize.Alignment = fyne.TextAlignCenter
-	ui.detailContainer.Add(fileSize)
+	formattedSize := fmt.Sprintf("%.2f MB", fileSizeFloat) // (fileSizeFloat)
+	fileSize := container.NewGridWithColumns(3, widget.NewLabel("Size:"), widget.NewLabel(formattedSize), spacer)
 
 	bpmLabel := widget.NewLabel(fmt.Sprintf("%.2f", file.BPM))
-	bpmLabel.Alignment = fyne.TextAlignCenter
-	bppmHBox := container.NewHBox(spacer, spacer, widget.NewLabel("BPM:"), spacer, bpmLabel, spacer, spacer)
-	ui.detailContainer.Add(bppmHBox)
+	bppmHBox := container.NewGridWithColumns(3, widget.NewLabel("BPM:"), bpmLabel, spacer)
 
 	releaseDate := widget.NewLabel(file.UpdatedAt.Format("Jan 02, 2006"))
-	releaseDate.Alignment = fyne.TextAlignCenter
-	releasedHBox := container.NewHBox(spacer, spacer, widget.NewLabel("Release Date:"), spacer, releaseDate, spacer, spacer)
-	ui.detailContainer.Add(releasedHBox)
+	releasedHBox := container.NewGridWithColumns(3, widget.NewLabel("Release Date:"), releaseDate, spacer)
 
 	createdAt := widget.NewLabel(file.CreatedAt.Format("Jan 02, 2006"))
-	createdAt.Alignment = fyne.TextAlignCenter
-	createdAtHBox := container.NewHBox(spacer, spacer, widget.NewLabel("Created At:"), spacer, createdAt, spacer, spacer)
-	ui.detailContainer.Add(createdAtHBox)
+	createdAtHBox := container.NewGridWithColumns(3, widget.NewLabel("Created At:"), createdAt, spacer)
 
 	updatedAt := widget.NewLabel(file.UpdatedAt.Format("Jan 02, 2006"))
-	updatedAt.Alignment = fyne.TextAlignCenter
-	updateHBox := container.NewHBox(spacer, spacer, widget.NewLabel("Updated At:"), spacer, updatedAt, spacer, spacer)
-	ui.detailContainer.Add(updateHBox)
+	updateHBox := container.NewGridWithColumns(3, widget.NewLabel("Updated At:"), updatedAt, spacer)
 
 	genreSelect := widget.NewSelect([]string{"Hip-Hop", "Jazz"}, func(value string) { file.Genre = value })
 	genreSelect.SetSelected(file.Genre)
-	genreS := container.NewHBox(spacer, spacer, widget.NewLabel("Genre:"), spacer, genreSelect, spacer, spacer)
+	genreS := container.NewGridWithColumns(3, widget.NewLabel("Genre:"), genreSelect, spacer)
 
 	statusSelect := widget.NewSelect([]string{"WIP", "Upcoming"}, func(value string) { file.Status = value })
 	statusSelect.SetSelected(file.Status)
-	statusS := container.NewHBox(spacer, spacer, widget.NewLabel("Status:"), spacer, statusSelect, spacer, spacer)
+	statusS := container.NewGridWithColumns(3, widget.NewLabel("Status:"), statusSelect, spacer)
 
 	gradeSelect := widget.NewSelect([]string{"S", "D"}, func(value string) { file.Grade = value })
 	gradeSelect.SetSelected(file.Grade)
-	gradeS := container.NewHBox(spacer, spacer, widget.NewLabel("Grade:"), spacer, gradeSelect, spacer, spacer)
+	gradeS := container.NewGridWithColumns(3, widget.NewLabel("Grade:"), gradeSelect, spacer)
 
-	keyLabel := widget.NewLabel(fmt.Sprintf(file.Key, "Major"))
-	// bpmLabel.Alignment = fyne.TextAlignCenter
-	keyS := container.NewHBox(spacer, widget.NewLabel("Key:"), keyLabel, spacer)
+	keyLabel := widget.NewLabel(fmt.Sprint(file.Key, "Major"))
+	keyS := container.NewGridWithColumns(3, widget.NewLabel("Key:"), keyLabel, spacer)
 
-	// spacer := layout.NewSpacer()
-	selectsBox := container.NewVBox(genreS, statusS, gradeS, keyS)
-	ui.detailContainer.Add(selectsBox)
+	innerDetailsContainer := container.NewVBox(
+		keyS,
+		fileSize,
+		bppmHBox,
+		releasedHBox,
+		createdAtHBox,
+		updateHBox,
+		genreS,
+		statusS,
+		gradeS,
+	)
+	// detailsRectangle := canvas.NewRectangle(&color.RGBA{R: 192, G: 192, B: 192, A: 255})
+	detailsBorder := container.NewBorder(projectNameWithPadding, nil, nil, nil, innerDetailsContainer)
+	// detailsStack := container.NewVSplit(detailsRectangle, detailsBorder)
+	ui.detailContainer.Add(detailsBorder)
 
 	// Refresh the container to display the new content
 	ui.detailContainer.Refresh()
+
 }
 
 // Run starts the application, displaying the main window.
